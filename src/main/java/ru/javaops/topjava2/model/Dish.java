@@ -20,5 +20,5 @@ import java.io.Serializable;
 public class Dish extends NamedEntity implements HasId, Serializable {
     @Column(name = "dish_price", nullable = false)
     @NotNull
-    Double price;
+    Integer price;
 }
