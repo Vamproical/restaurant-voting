@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import ru.javaops.topjava2.HasId;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import java.util.List;
 @Table(name = "menu", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"restaraunt_id", "create_date"}, name = "unique_restaurant_menu_by_date_idx")
 })
-public class Menu extends BaseEntity {
+public class Menu extends BaseEntity implements HasId, Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaraunt_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
