@@ -19,10 +19,10 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Table(name = "vote",
        indexes = {
-               @Index(name = "vote_date_restaurant_id_idx", columnList = "RESTAURANT_ID,VOTE_DATE"),
+               @Index(name = "vote_date_restaurant_id_idx", columnList = "restaurant_id,vote_date"),
        },
        uniqueConstraints = {
-               @UniqueConstraint(name = "unique_vote_user_by_date", columnNames = {"USER_ID", "VOTE_DATE"})
+               @UniqueConstraint(name = "unique_vote_user_by_date", columnNames = {"user_id", "vote_date"})
        })
 public class Vote extends BaseEntity implements HasId, Serializable {
     @ManyToOne(fetch = FetchType.LAZY)

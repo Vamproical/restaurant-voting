@@ -81,10 +81,10 @@ public class RestExceptionHandler {
         String path = request.getRequestURI();
         Class<? extends Exception> exClass = ex.getClass();
         Optional<ErrorType> optType = HTTP_STATUS_MAP.entrySet().stream()
-                .filter(
-                        entry -> entry.getKey().isAssignableFrom(exClass)
-                )
-                .findAny().map(Map.Entry::getValue);
+                                                     .filter(
+                                                             entry -> entry.getKey().isAssignableFrom(exClass)
+                                                            )
+                                                     .findAny().map(Map.Entry::getValue);
         if (optType.isPresent()) {
             log.error(ERR_PFX + "Exception {} at request {}", ex, path);
             return createProblemDetail(ex, optType.get(), ex.getMessage(), additionalParams);
