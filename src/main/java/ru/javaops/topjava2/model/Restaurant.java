@@ -17,4 +17,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 public class Restaurant extends NamedEntity implements HasId, Serializable {
+    public Restaurant(Integer id, String name) {
+        super(id, name);
+    }
 }

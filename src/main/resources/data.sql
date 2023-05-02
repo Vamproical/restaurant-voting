@@ -9,6 +9,6 @@ VALUES ('USER', 1),
        ('USER', 2);
 
 INSERT INTO RESTAURANT(id, name)
-VALUES (1, 'Sample Restaurant'),
-       (2, 'Invisible');
+VALUES (10, 'Sample Restaurant'),
+       (11, 'Invisible');
 
