@@ -1,5 +1,6 @@
 package ru.javaops.topjava2.web.menu;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Menu;
 import ru.javaops.topjava2.repository.MenuRepository;
+import ru.javaops.topjava2.to.CreateMenuTo;
 import ru.javaops.topjava2.to.MenuTo;
+import ru.javaops.topjava2.web.action.menu.CreateMenuAction;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
-import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,8 +26,14 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 public class AdminMenuController {
     static final String REST_URL = "/api/admin/menu";
 
+    private final CreateMenuAction createAction;
     private final MenuRepository repository;
     private final MenuMapper mapper;
+
+    @GetMapping
+    public List<MenuTo> getAll(@RequestParam @Nullable LocalDate date) {
+        return mapper.toListDto(repository.findAllByDate(date));
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -32,9 +42,8 @@ public class AdminMenuController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MenuTo> createWithLocation(@Valid @RequestBody Menu menu) {
-        checkNew(menu);
-        Menu created = repository.save(menu);
+    public ResponseEntity<MenuTo> createWithLocation(@Valid @RequestBody CreateMenuTo menu) {
+        Menu created = createAction.execute(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                                                           .path(REST_URL + "/{id}")
                                                           .buildAndExpand(created.getId()).toUri();

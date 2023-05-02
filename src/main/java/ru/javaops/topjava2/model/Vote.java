@@ -2,6 +2,7 @@ package ru.javaops.topjava2.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,19 +18,22 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "vote",
        indexes = {
-               @Index(name = "vote_date_restaurant_id_idx", columnList = "restaurant_id,vote_date"),
+               @Index(name = "vote_date_restaurant_id_idx",
+                      columnList = "restaurant_id, vote_date"),
        },
        uniqueConstraints = {
-               @UniqueConstraint(name = "unique_vote_user_by_date", columnNames = {"user_id", "vote_date"})
+               @UniqueConstraint(columnNames = {"user_id", "vote_date"},
+                                 name = "unique_vote_user_by_date")
        })
 public class Vote extends BaseEntity implements HasId, Serializable {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

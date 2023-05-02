@@ -7,3 +7,8 @@ INSERT INTO USER_ROLE (role, user_id)
 VALUES ('USER', 1),
        ('ADMIN', 2),
        ('USER', 2);
+
+INSERT INTO RESTAURANT(id, name)
+VALUES (1, 'Sample Restaurant'),
+       (2, 'Invisible');
+

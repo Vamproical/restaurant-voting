@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.javaops.topjava2.repository.MenuRepository;
 import ru.javaops.topjava2.to.MenuTo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class UserMenuController {
     }
 
     @GetMapping
-    public List<MenuTo> getAll() {
-        return mapper.toListDto(repository.findAll());
+    public List<MenuTo> getAllForToday() {
+        return mapper.toListDto(repository.findAllByDate(LocalDate.now()));
     }
 }

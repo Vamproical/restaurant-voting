@@ -11,5 +11,5 @@ import java.util.List;
 public class MenuTo extends BaseTo {
     RestaurantTo restaurant;
     List<DishTo> dishes;
-    LocalDate createDate;
+    LocalDate date;
 }

@@ -1,9 +1,12 @@
 package ru.javaops.topjava2.to;
 
 import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.Getter;
 
-@Value
+@Getter
 @EqualsAndHashCode(callSuper = true)
 public class RestaurantTo extends NamedTo {
+    public RestaurantTo(Integer id, String name) {
+        super(id, name);
+    }
 }
