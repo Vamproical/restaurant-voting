@@ -17,10 +17,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.web.menu.AdminMenuController.REST_URL;
-import static ru.javaops.topjava2.web.menu.MenuTestData.MENU_ID;
-import static ru.javaops.topjava2.web.menu.MenuTestData.MENU_MATCHER;
+import static ru.javaops.topjava2.web.menu.MenuTestData.*;
 import static ru.javaops.topjava2.web.user.UserTestData.ADMIN_MAIL;
 import static ru.javaops.topjava2.web.user.UserTestData.USER_MAIL;
 
@@ -60,17 +60,22 @@ class AdminMenuControllerTest extends AbstractControllerTest {
         MENU_MATCHER.assertMatch(menuRepository.get(newId), created);
     }
 
-    /*@Test
+    @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void update() throws Exception {
-        RestaurantTo updatedTo = new RestaurantTo(RESTAURANT_ID, "Updated Restaurant");
-        Restaurant expected = new Restaurant(RESTAURANT_ID, "Updated Restaurant");
+    void getAll() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MENU_TO_MATCHER.contentJson(menuTo2, menuTo));
+    }
 
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_ID).contentType(MediaType.APPLICATION_JSON)
-                                      .content(JsonUtil.writeValue(updatedTo)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-
-        RESTAURANT_MATCHER.assertMatch(restaurantRepository.get(RESTAURANT_ID), expected);
-    }*/
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getAllByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-date")
+                                      .param("date", "2023-05-01"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MENU_TO_MATCHER.contentJson(List.of(menuTo2)));
+    }
 }

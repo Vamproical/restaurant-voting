@@ -1,8 +1,9 @@
 package ru.javaops.topjava2.web.menu;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,14 @@ public class AdminMenuController {
     private final MenuRepository repository;
     private final MenuMapper mapper;
 
-    @GetMapping
-    public List<MenuTo> getAll(@RequestParam @Nullable LocalDate date) {
+    @GetMapping("/by-date")
+    public List<MenuTo> getAllByDate(@RequestParam LocalDate date) {
         return mapper.toListDto(repository.findAllByDate(date));
+    }
+
+    @GetMapping
+    public List<MenuTo> getAll(@SortDefault(value = "date") Sort sort) {
+        return mapper.toListDto(repository.findAll(sort));
     }
 
     @DeleteMapping("/{id}")

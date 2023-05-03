@@ -25,7 +25,7 @@ import java.util.List;
 })
 public class Menu extends BaseEntity implements HasId, Serializable {
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaraunt_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
