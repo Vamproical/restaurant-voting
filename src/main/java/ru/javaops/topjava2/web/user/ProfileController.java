@@ -22,7 +22,6 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-// TODO: cache only most requested data!
 public class ProfileController extends AbstractUserController {
     static final String REST_URL = "/api/profile";
 
@@ -45,7 +44,7 @@ public class ProfileController extends AbstractUserController {
         checkNew(userTo);
         User created = repository.prepareAndSave(UsersUtil.createNewFromTo(userTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL).build().toUri();
+                                                          .path(REST_URL).build().toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

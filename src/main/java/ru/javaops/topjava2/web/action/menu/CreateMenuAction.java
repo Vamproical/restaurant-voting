@@ -23,6 +23,6 @@ public class CreateMenuAction {
         Restaurant restaurant = restaurantRepository.getExisted(menuTo.getRestaurantId());
         LocalDate date = menuTo.getMenuDate() == null ? LocalDate.now() : menuTo.getMenuDate();
 
-        return repository.save(new Menu(restaurant, menuTo.getDishes(), date));
+        return repository.save(new Menu(null, restaurant, menuTo.getDishes(), date));
     }
 }

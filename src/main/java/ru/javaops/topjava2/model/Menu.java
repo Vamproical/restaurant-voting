@@ -1,9 +1,9 @@
 package ru.javaops.topjava2.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +18,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "menu", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"restaraunt_id", "date"},
@@ -34,6 +33,7 @@ public class Menu extends BaseEntity implements HasId, Serializable {
     @NotEmpty
     @ElementCollection(targetClass = Dish.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "dish_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "menu_dishes", joinColumns = @JoinColumn(name = "menu_id"),
                      uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_name"},
                                                            name = "unique_dish_on_menu_idx"))
@@ -41,6 +41,13 @@ public class Menu extends BaseEntity implements HasId, Serializable {
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
+    public Menu(Integer id, Restaurant restaurant, List<Dish> dishes, @Nullable LocalDate date) {
+        super(id);
+        this.restaurant = restaurant;
+        this.dishes = dishes;
+        this.date = date;
+    }
 }
 
 
