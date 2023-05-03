@@ -2,10 +2,7 @@ package ru.javaops.topjava2.web.restaurant;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.to.RestaurantTo;
 
@@ -28,5 +25,10 @@ public class UserRestaurantController {
     @GetMapping
     public List<RestaurantTo> getAll() {
         return mapper.toListDto(repository.findAll());
+    }
+
+    @GetMapping("/by-name")
+    public List<RestaurantTo> getAllByName(@RequestParam String name) {
+        return mapper.toListDto(repository.findAllByNameContainsIgnoreCase(name));
     }
 }
