@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.repository.RestaurantRepository;
+import ru.javaops.topjava2.to.RestaurantTo;
 import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.AbstractControllerTest;
 
@@ -56,5 +57,19 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         newRestaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
         RESTAURANT_MATCHER.assertMatch(restaurantRepository.get(newId), newRestaurant);
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void update() throws Exception {
+        RestaurantTo updatedTo = new RestaurantTo(RESTAURANT_ID, "Updated Restaurant");
+        Restaurant expected = new Restaurant(RESTAURANT_ID, "Updated Restaurant");
+
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_ID).contentType(MediaType.APPLICATION_JSON)
+                                      .content(JsonUtil.writeValue(updatedTo)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.get(RESTAURANT_ID), expected);
     }
 }

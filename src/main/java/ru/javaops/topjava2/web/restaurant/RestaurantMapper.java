@@ -8,6 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface RestaurantMapper {
+    Restaurant toModel(RestaurantTo restaurant);
+
     RestaurantTo toDto(Restaurant restaurant);
 
     List<RestaurantTo> toListDto(List<Restaurant> restaurants);
