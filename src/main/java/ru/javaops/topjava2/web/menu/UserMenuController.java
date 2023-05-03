@@ -2,10 +2,7 @@ package ru.javaops.topjava2.web.menu;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.javaops.topjava2.repository.MenuRepository;
 import ru.javaops.topjava2.to.MenuTo;
 
@@ -29,5 +26,10 @@ public class UserMenuController {
     @GetMapping
     public List<MenuTo> getAllForToday() {
         return mapper.toListDto(repository.findAllByDate(LocalDate.now()));
+    }
+
+    @GetMapping("by-restaurant")
+    public List<MenuTo> getAllByRestaurant(@RequestParam Integer restaurantId) {
+        return mapper.toListDto(repository.findAllByRestaurant(restaurantId));
     }
 }

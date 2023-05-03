@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javaops.topjava2.web.menu.MenuTestData.*;
 import static ru.javaops.topjava2.web.menu.UserMenuController.REST_URL;
-import static ru.javaops.topjava2.web.user.UserTestData.ADMIN_MAIL;
 import static ru.javaops.topjava2.web.user.UserTestData.USER_MAIL;
 
 class UserMenuControllerTest extends AbstractControllerTest {
@@ -30,9 +29,19 @@ class UserMenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = ADMIN_MAIL)
+    @WithUserDetails(value = USER_MAIL)
     void getAllForToday() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MENU_TO_MATCHER.contentJson(List.of(menuTo)));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getAllByRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-restaurant")
+                                      .param("restaurantId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MENU_TO_MATCHER.contentJson(List.of(menuTo)));
