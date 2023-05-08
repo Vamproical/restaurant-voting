@@ -19,13 +19,13 @@ public class UpdateMenuAction {
     private final MenuMapper mapper;
 
     @Transactional
-    public Menu execute(@NonNull UpdateMenuTo menuTo, @NonNull Integer menuId) {
+    public void execute(@NonNull UpdateMenuTo menuTo, @NonNull Integer menuId) {
         Restaurant restaurant = restaurantRepository.getExisted(menuTo.restaurantId());
         Menu menu = repository.getExisted(menuId);
 
         menu.setRestaurant(restaurant);
         menu.setDishes(mapper.toDishList(menuTo.dishes()));
 
-        return repository.save(menu);
+        repository.save(menu);
     }
 }

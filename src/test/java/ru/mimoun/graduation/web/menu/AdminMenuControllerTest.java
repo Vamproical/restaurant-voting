@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.mimoun.graduation.web.menu.MenuTestData.MENU_ID;
-import static ru.mimoun.graduation.web.menu.MenuTestData.getUpdated;
+import static ru.mimoun.graduation.web.menu.MenuTestData.*;
 
 class AdminMenuControllerTest extends AbstractControllerTest {
     private static final String REST_URL_SLASH = AdminMenuController.REST_URL + '/';
@@ -55,22 +54,22 @@ class AdminMenuControllerTest extends AbstractControllerTest {
                                                              .content(JsonUtil.writeValue(menu)))
                 .andExpect(status().isCreated());
 
-        Menu created = MenuTestData.MENU_MATCHER.readFromJson(action);
+        Menu created = MENU_MATCHER.readFromJson(action);
         int newId = created.id();
-        MenuTestData.MENU_MATCHER.assertMatch(menuRepository.getExisted(newId), created);
+        MENU_MATCHER.assertMatch(menuRepository.getExisted(newId), created);
     }
 
     @Test
     @WithUserDetails(value = UserTestData.ADMIN_MAIL)
     void update() throws Exception {
         UpdateMenuTo menu = new UpdateMenuTo(2, List.of(new DishTo("Updated Dish", 100)));
-        ResultActions action = perform(MockMvcRequestBuilders.put(REST_URL_SLASH + MENU_ID)
-                                                             .contentType(MediaType.APPLICATION_JSON)
-                                                             .content(JsonUtil.writeValue(menu)))
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + MENU_ID)
+                                      .contentType(MediaType.APPLICATION_JSON)
+                                      .content(JsonUtil.writeValue(menu)))
                 .andExpect(status().isNoContent());
 
         Menu updated = getUpdated();
-        MenuTestData.MENU_MATCHER.assertMatch(menuRepository.getExisted(MENU_ID), updated);
+        MENU_MATCHER.assertMatch(menuRepository.getExisted(MENU_ID), updated);
     }
 
     @Test
