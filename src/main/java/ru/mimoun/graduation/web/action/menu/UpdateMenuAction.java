@@ -1,6 +1,6 @@
 package ru.mimoun.graduation.web.action.menu;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,23 +8,24 @@ import ru.mimoun.graduation.model.Menu;
 import ru.mimoun.graduation.model.Restaurant;
 import ru.mimoun.graduation.repository.MenuRepository;
 import ru.mimoun.graduation.repository.RestaurantRepository;
-import ru.mimoun.graduation.to.CreateMenuTo;
+import ru.mimoun.graduation.to.UpdateMenuTo;
 import ru.mimoun.graduation.web.menu.MenuMapper;
-
-import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
-public class CreateMenuAction {
+public class UpdateMenuAction {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository repository;
     private final MenuMapper mapper;
 
     @Transactional
-    public Menu execute(@NotNull CreateMenuTo menuTo) {
-        Restaurant restaurant = restaurantRepository.getExisted(menuTo.getRestaurantId());
-        LocalDate date = menuTo.getMenuDate() == null ? LocalDate.now() : menuTo.getMenuDate();
+    public Menu execute(@NonNull UpdateMenuTo menuTo, @NonNull Integer menuId) {
+        Restaurant restaurant = restaurantRepository.getExisted(menuTo.restaurantId());
+        Menu menu = repository.getExisted(menuId);
 
-        return repository.save(new Menu(null, restaurant, mapper.toDishList(menuTo.getDishes()), date));
+        menu.setRestaurant(restaurant);
+        menu.setDishes(mapper.toDishList(menuTo.dishes()));
+
+        return repository.save(menu);
     }
 }

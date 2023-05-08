@@ -15,13 +15,13 @@ import ru.mimoun.graduation.model.Menu;
 import ru.mimoun.graduation.repository.MenuRepository;
 import ru.mimoun.graduation.to.CreateMenuTo;
 import ru.mimoun.graduation.to.MenuTo;
+import ru.mimoun.graduation.to.UpdateMenuTo;
 import ru.mimoun.graduation.web.action.menu.CreateMenuAction;
+import ru.mimoun.graduation.web.action.menu.UpdateMenuAction;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-
-import static ru.mimoun.graduation.util.validation.ValidationUtil.assureIdConsistent;
 
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,6 +30,7 @@ public class AdminMenuController {
     static final String REST_URL = "/api/admin/menus";
 
     private final CreateMenuAction createAction;
+    private final UpdateMenuAction updateAction;
     private final MenuRepository repository;
     private final MenuMapper mapper;
 
@@ -64,11 +65,10 @@ public class AdminMenuController {
         return ResponseEntity.created(uriOfNewResource).body(mapper.toDto(created));
     }
 
-    @Operation(summary = "Update menu by id")
+    @Operation(summary = "Update menu by id", description = "Administrator can update only list of dish and restaurant on menu")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Menu menu, @PathVariable int id) {
-        assureIdConsistent(menu, id);
-        repository.save(menu);
+    public void update(@Valid @RequestBody UpdateMenuTo menu, @PathVariable int id) {
+        updateAction.execute(menu, id);
     }
 }

@@ -1,4 +1,6 @@
 package ru.mimoun.graduation.to;
 
-public record DishTo(String name, Integer price) {
+import jakarta.validation.constraints.NotNull;
+
+public record DishTo(@NotNull String name, @NotNull Integer price) {
 }

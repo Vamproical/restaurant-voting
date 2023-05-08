@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.UpdateTimestamp;
 import ru.mimoun.graduation.HasId;
 
 import java.io.Serializable;
@@ -29,18 +29,18 @@ import java.time.LocalDate;
                                  name = "unique_vote_user_by_date")
        })
 public class Vote extends BaseEntity implements HasId, Serializable {
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @NotNull
     @Column(name = "vote_date", nullable = false)
-    @UpdateTimestamp
+    @CreationTimestamp
     private LocalDate voteDate;
 }

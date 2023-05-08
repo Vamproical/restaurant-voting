@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.mimoun.graduation.model.Dish;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +16,7 @@ public class CreateMenuTo {
     Integer restaurantId;
 
     @NotNull
-    List<Dish> dishes;
+    List<DishTo> dishes;
 
     LocalDate menuDate;
 }

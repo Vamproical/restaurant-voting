@@ -6,10 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.mimoun.graduation.model.Dish;
 import ru.mimoun.graduation.model.Menu;
 import ru.mimoun.graduation.repository.MenuRepository;
 import ru.mimoun.graduation.to.CreateMenuTo;
+import ru.mimoun.graduation.to.DishTo;
+import ru.mimoun.graduation.to.UpdateMenuTo;
 import ru.mimoun.graduation.util.JsonUtil;
 import ru.mimoun.graduation.web.AbstractControllerTest;
 import ru.mimoun.graduation.web.user.UserTestData;
@@ -20,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.mimoun.graduation.web.menu.MenuTestData.MENU_ID;
+import static ru.mimoun.graduation.web.menu.MenuTestData.getUpdated;
 
 class AdminMenuControllerTest extends AbstractControllerTest {
     private static final String REST_URL_SLASH = AdminMenuController.REST_URL + '/';
@@ -37,16 +40,16 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = UserTestData.ADMIN_MAIL)
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + MenuTestData.MENU_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL_SLASH + MENU_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertFalse(menuRepository.findById(MenuTestData.MENU_ID).isPresent());
+        assertFalse(menuRepository.findById(MENU_ID).isPresent());
     }
 
     @Test
     @WithUserDetails(value = UserTestData.ADMIN_MAIL)
     void createWithLocation() throws Exception {
-        CreateMenuTo menu = new CreateMenuTo(2, List.of(new Dish("Some Dish", 150)), null);
+        CreateMenuTo menu = new CreateMenuTo(2, List.of(new DishTo("Some Dish", 150)), null);
         ResultActions action = perform(MockMvcRequestBuilders.post(AdminMenuController.REST_URL)
                                                              .contentType(MediaType.APPLICATION_JSON)
                                                              .content(JsonUtil.writeValue(menu)))
@@ -55,6 +58,19 @@ class AdminMenuControllerTest extends AbstractControllerTest {
         Menu created = MenuTestData.MENU_MATCHER.readFromJson(action);
         int newId = created.id();
         MenuTestData.MENU_MATCHER.assertMatch(menuRepository.getExisted(newId), created);
+    }
+
+    @Test
+    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    void update() throws Exception {
+        UpdateMenuTo menu = new UpdateMenuTo(2, List.of(new DishTo("Updated Dish", 100)));
+        ResultActions action = perform(MockMvcRequestBuilders.put(REST_URL_SLASH + MENU_ID)
+                                                             .contentType(MediaType.APPLICATION_JSON)
+                                                             .content(JsonUtil.writeValue(menu)))
+                .andExpect(status().isNoContent());
+
+        Menu updated = getUpdated();
+        MenuTestData.MENU_MATCHER.assertMatch(menuRepository.getExisted(MENU_ID), updated);
     }
 
     @Test

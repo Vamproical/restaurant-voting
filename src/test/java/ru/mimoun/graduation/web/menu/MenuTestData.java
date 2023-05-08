@@ -28,4 +28,12 @@ public class MenuTestData {
 
     public static final MenuTo menuTo2 = new MenuTo(2, RestaurantTestData.restaurantTo2, List.of(new DishTo("Not visible dish", 10)),
                                                     LocalDate.of(2023, 5, 1));
+
+    public static Menu getUpdated() {
+        Menu updated = menu;
+        updated.setRestaurant(RestaurantTestData.restaurant2);
+        updated.setDishes(List.of(new Dish("Updated Dish", 100)));
+
+        return updated;
+    }
 }
