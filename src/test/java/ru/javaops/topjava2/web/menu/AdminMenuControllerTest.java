@@ -51,13 +51,13 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     void createWithLocation() throws Exception {
         CreateMenuTo menu = new CreateMenuTo(2, List.of(new Dish("Some Dish", 150)), null);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-                                                             .contentType(MediaType.APPLICATION_JSON)
-                                                             .content(JsonUtil.writeValue(menu)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(menu)))
                 .andExpect(status().isCreated());
 
         Menu created = MENU_MATCHER.readFromJson(action);
         int newId = created.id();
-        MENU_MATCHER.assertMatch(menuRepository.get(newId), created);
+        MENU_MATCHER.assertMatch(menuRepository.getExisted(newId), created);
     }
 
     @Test
@@ -73,7 +73,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void getAllByDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-date")
-                                      .param("date", "2023-05-01"))
+                .param("date", "2023-05-01"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MENU_TO_MATCHER.contentJson(List.of(menuTo2)));

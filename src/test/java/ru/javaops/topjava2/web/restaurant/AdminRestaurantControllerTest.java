@@ -48,15 +48,15 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     void createWithLocation() throws Exception {
         Restaurant newRestaurant = new Restaurant(null, "New Restaurant");
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-                                                             .contentType(MediaType.APPLICATION_JSON)
-                                                             .content(JsonUtil.writeValue(newRestaurant)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
                 .andExpect(status().isCreated());
 
         Restaurant created = RESTAURANT_MATCHER.readFromJson(action);
         int newId = created.id();
         newRestaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
-        RESTAURANT_MATCHER.assertMatch(restaurantRepository.get(newId), newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(newId), newRestaurant);
     }
 
     @Test
@@ -66,10 +66,10 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
         Restaurant expected = new Restaurant(RESTAURANT_ID, "Updated Restaurant");
 
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH + RESTAURANT_ID).contentType(MediaType.APPLICATION_JSON)
-                                      .content(JsonUtil.writeValue(updatedTo)))
+                .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        RESTAURANT_MATCHER.assertMatch(restaurantRepository.get(RESTAURANT_ID), expected);
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(RESTAURANT_ID), expected);
     }
 }
