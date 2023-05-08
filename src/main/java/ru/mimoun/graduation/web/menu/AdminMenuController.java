@@ -1,5 +1,7 @@
 package ru.mimoun.graduation.web.menu;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -31,23 +33,29 @@ public class AdminMenuController {
     private final MenuRepository repository;
     private final MenuMapper mapper;
 
+    @Operation(summary = "Get a list of menu by specified date")
     @GetMapping("/by-date")
     public List<MenuTo> getAllByDate(@RequestParam LocalDate date) {
         return mapper.toListDto(repository.findAllByDate(date));
     }
 
+    @Operation(summary = "Get a list of menu",
+               parameters = @Parameter(name = "sort", description = "Specified fields and direction to sort the list"))
     @GetMapping
     public List<MenuTo> getAll(@SortDefault(value = "date") Sort sort) {
         return mapper.toListDto(repository.findAll(sort));
     }
 
+    @Operation(summary = "Delete menu by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         repository.deleteExisted(id);
     }
 
+    @Operation(summary = "Create menu")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MenuTo> createWithLocation(@Valid @RequestBody CreateMenuTo menu) {
         Menu created = createAction.execute(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -56,6 +64,7 @@ public class AdminMenuController {
         return ResponseEntity.created(uriOfNewResource).body(mapper.toDto(created));
     }
 
+    @Operation(summary = "Update menu by id")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Menu menu, @PathVariable int id) {

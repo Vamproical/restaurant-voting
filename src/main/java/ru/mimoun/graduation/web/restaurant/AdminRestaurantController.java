@@ -1,5 +1,6 @@
 package ru.mimoun.graduation.web.restaurant;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,22 +24,25 @@ public class AdminRestaurantController {
     private final RestaurantRepository repository;
     private final RestaurantMapper mapper;
 
+    @Operation(summary = "Delete restaurant by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         repository.deleteExisted(id);
     }
 
+    @Operation(summary = "Create restaurant")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RestaurantTo> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
+    public ResponseEntity<RestaurantTo> createWithLocation(@Valid @RequestBody RestaurantTo restaurant) {
         ValidationUtil.checkNew(restaurant);
-        Restaurant created = repository.save(restaurant);
+        Restaurant created = repository.save(mapper.toModel(restaurant));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                                                           .path(REST_URL + "/{id}")
                                                           .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(mapper.toDto(created));
     }
 
+    @Operation(summary = "Update restaurant by id")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody RestaurantTo restaurant, @PathVariable int id) {

@@ -1,5 +1,6 @@
 package ru.mimoun.graduation.web.vote;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ public class VoteController {
 
     private final VoteService service;
 
+    @Operation(summary = "Get count of votes for specified restaurant")
     @GetMapping
     public VoteListTo getVotesForRestaurant(@RequestParam("restaurantId") Integer restaurantId) {
         return new VoteListTo(restaurantId, service.getAllForRestaurant(restaurantId).size());

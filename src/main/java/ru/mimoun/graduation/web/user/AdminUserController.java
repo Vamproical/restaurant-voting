@@ -1,5 +1,6 @@
 package ru.mimoun.graduation.web.user;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -21,24 +22,28 @@ public class AdminUserController extends AbstractUserController {
     static final String REST_URL = "/api/admin/users";
 
     @Override
+    @Operation(summary = "Get User by id")
     @GetMapping("/{id}")
     public User get(@PathVariable int id) {
         return super.get(id);
     }
 
     @Override
+    @Operation(summary = "Delete user by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         super.delete(id);
     }
 
+    @Operation(summary = "Get list of user")
     @GetMapping
     public List<User> getAll() {
         log.info("getAll");
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }
 
+    @Operation(summary = "Create user")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         log.info("create {}", user);
@@ -50,6 +55,7 @@ public class AdminUserController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Operation(summary = "Update user by id")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody User user, @PathVariable int id) {
@@ -58,12 +64,14 @@ public class AdminUserController extends AbstractUserController {
         repository.prepareAndSave(user);
     }
 
+    @Operation(summary = "Get user by email")
     @GetMapping("/by-email")
     public User getByEmail(@RequestParam String email) {
         log.info("getByEmail {}", email);
         return repository.getExistedByEmail(email);
     }
 
+    @Operation(summary = "Enable or disable user by id")
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
