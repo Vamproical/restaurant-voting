@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping(value = UserRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class UserRestaurantController {
-    static final String REST_URL = "/api/restaurant";
+    static final String REST_URL = "/api/restaurants";
 
     private final RestaurantRepository repository;
     private final RestaurantMapper mapper;

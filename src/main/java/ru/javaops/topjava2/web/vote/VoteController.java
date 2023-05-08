@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class VoteController {
-    static final String REST_URL = "/api/vote";
+    static final String REST_URL = "/api/votes";
 
     private final VoteService service;
     private final VoteMapper mapper;

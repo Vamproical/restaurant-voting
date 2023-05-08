@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping(value = UserMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class UserMenuController {
-    static final String REST_URL = "/api/menu";
+    static final String REST_URL = "/api/menus";
 
     private final MenuRepository repository;
     private final MenuMapper mapper;

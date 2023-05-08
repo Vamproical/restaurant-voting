@@ -25,7 +25,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsist
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AdminMenuController {
-    static final String REST_URL = "/api/admin/menu";
+    static final String REST_URL = "/api/admin/menus";
 
     private final CreateMenuAction createAction;
     private final MenuRepository repository;
