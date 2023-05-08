@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.javaops.topjava2.service.VoteService;
-import ru.javaops.topjava2.to.VoteTo;
-
-import java.util.List;
+import ru.javaops.topjava2.to.VoteListTo;
 
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -18,10 +16,9 @@ public class VoteController {
     static final String REST_URL = "/api/votes";
 
     private final VoteService service;
-    private final VoteMapper mapper;
 
     @GetMapping
-    public List<VoteTo> getVotesForRestaurant(@RequestParam("restaurantId") Integer restaurantId) {
-        return mapper.toDtoList(service.getAllForRestaurant(restaurantId));
+    public VoteListTo getVotesForRestaurant(@RequestParam("restaurantId") Integer restaurantId) {
+        return new VoteListTo(restaurantId, service.getAllForRestaurant(restaurantId).size());
     }
 }

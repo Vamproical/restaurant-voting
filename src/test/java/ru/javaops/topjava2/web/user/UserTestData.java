@@ -2,6 +2,7 @@ package ru.javaops.topjava2.web.user;
 
 import ru.javaops.topjava2.model.Role;
 import ru.javaops.topjava2.model.User;
+import ru.javaops.topjava2.to.UserTo;
 import ru.javaops.topjava2.util.JsonUtil;
 import ru.javaops.topjava2.web.MatcherFactory;
 
@@ -20,6 +21,7 @@ public class UserTestData {
     public static final String GUEST_MAIL = "guest@gmail.com";
 
     public static final User user = new User(USER_ID, "User", USER_MAIL, "password", Role.USER);
+    public static final UserTo userTo = new UserTo(USER_ID, "User", USER_MAIL, "password");
     public static final User admin = new User(ADMIN_ID, "Admin", ADMIN_MAIL, "admin", Role.ADMIN, Role.USER);
     public static final User guest = new User(GUEST_ID, "Guest", GUEST_MAIL, "guest");
 

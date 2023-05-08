@@ -20,8 +20,8 @@ public class ProfileVoteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VoteTo vote(@RequestParam("restaurantId") Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
-        return mapper.toDto(service.vote(restaurantId, authUser.id()));
+    public void vote(@RequestParam("restaurantId") Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+        service.vote(restaurantId, authUser.id());
     }
 
     @GetMapping
