@@ -1,5 +1,6 @@
 package ru.mimoun.graduation.service;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class VoteService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public Vote vote(Integer restaurantId, int userId) {
+    public Vote vote(@NonNull Integer restaurantId, @NonNull Integer userId) {
         LocalDate voteDate = LocalDate.now();
         Vote vote = voteRepository.findByUserIdAndVoteDate(userId, voteDate)
                                   .orElseGet(() -> {
@@ -47,15 +48,15 @@ public class VoteService {
         }
     }
 
-    public Vote getExistedByUser(int userId) {
+    public Vote getExistedByUser(@NonNull Integer userId) {
         return voteRepository.findVoteByUserId(userId, LocalDate.now()).orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
     }
 
-    public List<Vote> getAllForRestaurant(Integer restaurantId) {
-        return voteRepository.findVotesByRestaurantId(restaurantId);
+    public List<Vote> getAllForRestaurant(@NonNull Integer restaurantId, @NonNull LocalDate date) {
+        return voteRepository.findVotesByRestaurantId(restaurantId, date);
     }
 
-    public void delete(int userId) {
+    public void delete(@NonNull Integer userId) {
         checkTimeToVote();
         Vote existedByUser = getExistedByUser(userId);
         voteRepository.delete(existedByUser);

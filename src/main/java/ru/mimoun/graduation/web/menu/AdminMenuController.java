@@ -54,7 +54,7 @@ public class AdminMenuController {
         repository.deleteExisted(id);
     }
 
-    @Operation(summary = "Create menu")
+    @Operation(summary = "Create menu", description = "If menuDate is null, menu will be created for today")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MenuTo> createWithLocation(@Valid @RequestBody CreateMenuTo menu) {

@@ -19,20 +19,20 @@ public class ProfileVoteController {
     private final VoteService service;
     private final VoteMapper mapper;
 
-    @Operation(summary = "Vote for the restaurant", description = "User can vote or change his mind before 11:00")
+    @Operation(summary = "Vote for a restaurant", description = "User can vote or change his mind before 11:00")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void vote(@RequestParam("restaurantId") Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
         service.vote(restaurantId, authUser.id());
     }
 
-    @Operation(summary = "Get today user's vote")
+    @Operation(summary = "Get today's user vote")
     @GetMapping
     public VoteTo getCurrentVote(@AuthenticationPrincipal AuthUser authUser) {
         return mapper.toDto(service.getExistedByUser(authUser.id()));
     }
 
-    @Operation(summary = "Delete user's vote", description = "Vote will be deleted if time before 11:00")
+    @Operation(summary = "Delete a user's vote", description = "Vote will be deleted if time before 11:00")
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
