@@ -34,6 +34,6 @@ public class UserMenuController {
     @Operation(summary = "Get list of menu ")
     @GetMapping("by-restaurant")
     public List<MenuTo> getAllByRestaurant(@RequestParam Integer restaurantId) {
-        return mapper.toListDto(repository.findAllByRestaurant(restaurantId));
+        return mapper.toListDto(repository.findAllByRestaurant(restaurantId, LocalDate.now()));
     }
 }

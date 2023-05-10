@@ -14,6 +14,6 @@ public interface MenuRepository extends BaseRepository<Menu> {
     @Query("select m from Menu m where m.date = :date order by m.date desc, m.restaurant.name asc")
     List<Menu> findAllByDate(@NotNull @Param("date") LocalDate date);
 
-    @Query("select m from Menu m where m.restaurant.id = :restaurantId order by m.date desc, m.restaurant.name asc")
-    List<Menu> findAllByRestaurant(@NotNull @Param("restaurantId") Integer restaurantId);
+    @Query("select m from Menu m where m.restaurant.id = :restaurantId and m.date=:date order by m.date desc, m.restaurant.name asc")
+    List<Menu> findAllByRestaurant(@NotNull @Param("restaurantId") Integer restaurantId, @NotNull @Param("date") LocalDate date);
 }
