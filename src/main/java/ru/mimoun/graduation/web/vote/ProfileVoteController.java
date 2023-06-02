@@ -30,7 +30,7 @@ public class ProfileVoteController {
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void revote(@RequestParam("restaurantId") Integer restaurantId, @AuthenticationPrincipal AuthUser authUser) {
-        service.revote(restaurantId, authUser);
+        service.revote(restaurantId, authUser.id());
     }
 
 
