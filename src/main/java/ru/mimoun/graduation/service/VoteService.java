@@ -1,9 +1,9 @@
 package ru.mimoun.graduation.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mimoun.graduation.error.NotFoundException;
 import ru.mimoun.graduation.error.VoteTimeConstraintException;
 import ru.mimoun.graduation.model.Vote;
@@ -23,7 +23,7 @@ public class VoteService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public Vote vote(@NonNull Integer restaurantId, @NonNull Integer userId) {
+    public Vote vote(int restaurantId, int userId) {
         Vote vote = new Vote(restaurantRepository.getReferenceById(restaurantId),
                              userRepository.getReferenceById(userId),
                              LocalDate.now());
@@ -31,7 +31,8 @@ public class VoteService {
         return voteRepository.save(vote);
     }
 
-    public Vote revote(@NonNull Integer restaurantId, @NonNull Integer userId) {
+    @Transactional
+    public Vote revote(int restaurantId, int userId) {
         LocalDate voteDate = LocalDate.now();
         Vote vote = voteRepository.findByUserIdAndVoteDate(userId, voteDate)
                                   .orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
@@ -47,7 +48,7 @@ public class VoteService {
         }
     }
 
-    public Vote getExistedByUser(@NonNull Integer userId) {
+    public Vote getExistedByUser(int userId) {
         return voteRepository.findVoteByUserId(userId, LocalDate.now()).orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
     }
 }

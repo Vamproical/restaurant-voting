@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "menu", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"restaraunt_id", "date"},
+        @UniqueConstraint(columnNames = {"date", "restaraunt_id"},
                           name = "unique_restaurant_menu_by_date_idx")
 })
 public class Menu extends BaseEntity implements HasId, Serializable {
@@ -34,12 +34,12 @@ public class Menu extends BaseEntity implements HasId, Serializable {
     @ElementCollection(targetClass = Dish.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "dish_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @CollectionTable(name = "menu_dishes", joinColumns = @JoinColumn(name = "menu_id"),
+    @CollectionTable(name = "dish", joinColumns = @JoinColumn(name = "menu_id"),
                      uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_name"},
                                                            name = "unique_dish_on_menu_idx"))
     private List<Dish> dishes;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "menu_date", nullable = false)
     private LocalDate date;
 
     public Menu(Integer id, Restaurant restaurant, List<Dish> dishes, @Nullable LocalDate date) {

@@ -6,7 +6,6 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.mimoun.graduation.HasId;
 
 import java.io.Serializable;
 
@@ -16,7 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Restaurant extends NamedEntity implements HasId, Serializable {
+public class Restaurant extends NamedEntity implements Serializable {
     public Restaurant(Integer id, String name) {
         super(id, name);
     }

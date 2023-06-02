@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import ru.mimoun.graduation.HasId;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -28,12 +26,14 @@ import java.time.LocalDate;
                @UniqueConstraint(columnNames = {"user_id", "vote_date"},
                                  name = "unique_vote_user_by_date")
        })
-public class Vote extends BaseEntity implements HasId, Serializable {
+public class Vote extends BaseEntity implements Serializable {
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -41,6 +41,5 @@ public class Vote extends BaseEntity implements HasId, Serializable {
 
     @NotNull
     @Column(name = "vote_date", nullable = false)
-    @CreationTimestamp
     private LocalDate voteDate;
 }
