@@ -25,19 +25,19 @@ public class VoteService {
     private final RestaurantRepository restaurantRepository;
 
     public Vote vote(@NonNull Integer restaurantId, @NonNull Integer userId) {
+        Vote vote = new Vote(restaurantRepository.getReferenceById(restaurantId),
+                             userRepository.getReferenceById(userId),
+                             LocalDate.now());
+
+        return voteRepository.save(vote);
+    }
+
+    public Vote revote(@NonNull Integer restaurantId, @NonNull Integer userId) {
         LocalDate voteDate = LocalDate.now();
         Vote vote = voteRepository.findByUserIdAndVoteDate(userId, voteDate)
-                                  .orElseGet(() -> {
-                                      Vote temp = new Vote();
-                                      temp.setUser(userRepository.getReferenceById(userId));
-                                      temp.setVoteDate(voteDate);
-                                      return temp;
-                                  });
+                                  .orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
 
-        if (!vote.isNew()) {
-            checkTimeToVote();
-        }
-
+        checkTimeToVote();
         vote.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
         return voteRepository.save(vote);
     }
@@ -54,11 +54,5 @@ public class VoteService {
 
     public List<Vote> getAllForRestaurant(@NonNull Integer restaurantId, @NonNull LocalDate date) {
         return voteRepository.findVotesByRestaurantId(restaurantId, date);
-    }
-
-    public void delete(@NonNull Integer userId) {
-        checkTimeToVote();
-        Vote existedByUser = getExistedByUser(userId);
-        voteRepository.delete(existedByUser);
     }
 }
