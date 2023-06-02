@@ -1,4 +1,4 @@
-Voting system for deciding where to have lunch
+wVoting system for deciding where to have lunch
 ===============================
 
 - Stack: [JDK 17](http://jdk.java.net/17/), Spring Boot 3.0, Lombok, H2, Caffeine Cache, SpringDoc OpenApi 2.1,

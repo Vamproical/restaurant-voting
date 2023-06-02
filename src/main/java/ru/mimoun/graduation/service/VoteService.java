@@ -13,7 +13,6 @@ import ru.mimoun.graduation.repository.VoteRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,9 +49,5 @@ public class VoteService {
 
     public Vote getExistedByUser(@NonNull Integer userId) {
         return voteRepository.findVoteByUserId(userId, LocalDate.now()).orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
-    }
-
-    public List<Vote> getAllForRestaurant(@NonNull Integer restaurantId, @NonNull LocalDate date) {
-        return voteRepository.findVotesByRestaurantId(restaurantId, date);
     }
 }

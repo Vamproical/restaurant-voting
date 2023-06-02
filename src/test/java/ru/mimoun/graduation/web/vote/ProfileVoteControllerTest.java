@@ -29,7 +29,7 @@ class ProfileVoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getActualVote() throws Exception {
-        perform(MockMvcRequestBuilders.get(ProfileVoteController.REST_URL))
+        perform(MockMvcRequestBuilders.get(ProfileVoteController.REST_URL + "/current"))
                 .andDo(print())
                 .andExpect(VoteTestData.VOTE_TO_MATCHER.contentJson(VoteTestData.voteTo));
     }
