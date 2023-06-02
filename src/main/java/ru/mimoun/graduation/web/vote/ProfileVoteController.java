@@ -27,15 +27,8 @@ public class ProfileVoteController {
     }
 
     @Operation(summary = "Get today's user vote")
-    @GetMapping
+    @GetMapping("current")
     public VoteTo getCurrentVote(@AuthenticationPrincipal AuthUser authUser) {
         return mapper.toDto(service.getExistedByUser(authUser.id()));
-    }
-
-    @Operation(summary = "Delete a user's vote", description = "Vote will be deleted if time before 11:00")
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthUser authUser) {
-        service.delete(authUser.id());
     }
 }
