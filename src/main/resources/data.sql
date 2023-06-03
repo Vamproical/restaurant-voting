@@ -12,11 +12,11 @@ INSERT INTO RESTAURANT(name)
 VALUES ('Sample Restaurant'),
        ('Invisible');
 
-INSERT INTO MENU(DATE, RESTARAUNT_ID)
+INSERT INTO MENU(MENU_DATE, RESTARAUNT_ID)
 VALUES (now(), 1),
        ('2023-05-01', 2);
 
-INSERT INTO MENU_DISHES(MENU_ID, DISH_NAME, DISH_PRICE)
+INSERT INTO DISH(MENU_ID, DISH_NAME, DISH_PRICE)
 VALUES (1, 'Delicious dish', 150),
        (1, 'Hamburger', 200),
        (2, 'Not visible dish', 10);

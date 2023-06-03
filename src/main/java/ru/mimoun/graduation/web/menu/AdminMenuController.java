@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.mimoun.graduation.model.Menu;
 import ru.mimoun.graduation.repository.MenuRepository;
+import ru.mimoun.graduation.service.MenuService;
 import ru.mimoun.graduation.to.CreateMenuTo;
 import ru.mimoun.graduation.to.MenuTo;
 import ru.mimoun.graduation.to.UpdateMenuTo;
-import ru.mimoun.graduation.web.action.menu.CreateMenuAction;
-import ru.mimoun.graduation.web.action.menu.UpdateMenuAction;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -29,9 +28,8 @@ import java.util.List;
 public class AdminMenuController {
     static final String REST_URL = "/api/admin/menus";
 
-    private final CreateMenuAction createAction;
-    private final UpdateMenuAction updateAction;
     private final MenuRepository repository;
+    private final MenuService service;
     private final MenuMapper mapper;
 
     @Operation(summary = "Get a list of menu by specified date")
@@ -56,9 +54,8 @@ public class AdminMenuController {
 
     @Operation(summary = "Create menu", description = "If menuDate is null, menu will be created for today")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MenuTo> createWithLocation(@Valid @RequestBody CreateMenuTo menu) {
-        Menu created = createAction.execute(menu);
+        Menu created = service.save(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                                                           .path(REST_URL + "/{id}")
                                                           .buildAndExpand(created.getId()).toUri();
@@ -69,6 +66,6 @@ public class AdminMenuController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UpdateMenuTo menu, @PathVariable int id) {
-        updateAction.execute(menu, id);
+        service.update(menu, id);
     }
 }

@@ -23,6 +23,7 @@ public class VoteService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
 
+    @Transactional
     public Vote vote(int restaurantId, int userId) {
         Vote vote = new Vote(restaurantRepository.getReferenceById(restaurantId),
                              userRepository.getReferenceById(userId),
@@ -34,16 +35,18 @@ public class VoteService {
     @Transactional
     public Vote revote(int restaurantId, int userId) {
         LocalDate voteDate = LocalDate.now();
+        LocalTime voteTime = LocalTime.now();
         Vote vote = voteRepository.findByUserIdAndVoteDate(userId, voteDate)
                                   .orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
 
-        checkTimeToVote();
+        checkTimeToVote(voteTime);
+
         vote.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
         return voteRepository.save(vote);
     }
 
-    private void checkTimeToVote() {
-        if (LocalTime.now().isAfter(overTimeToVote)) {
+    private void checkTimeToVote(LocalTime time) {
+        if (time.isAfter(overTimeToVote)) {
             throw new VoteTimeConstraintException("You can vote or change the vote only before 11:00 AM");
         }
     }

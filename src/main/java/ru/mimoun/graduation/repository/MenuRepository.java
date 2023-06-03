@@ -11,9 +11,9 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface MenuRepository extends BaseRepository<Menu> {
-    @Query("select m from Menu m where m.date = :date order by m.date desc, m.restaurant.name asc")
+    @Query("SELECT m FROM Menu m WHERE m.date = :date ORDER BY m.date DESC, m.restaurant.name ASC")
     List<Menu> findAllByDate(@NotNull @Param("date") LocalDate date);
 
-    @Query("select m from Menu m where m.restaurant.id = :restaurantId and m.date=:date order by m.date desc, m.restaurant.name asc")
-    List<Menu> findAllByRestaurant(@NotNull @Param("restaurantId") Integer restaurantId, @NotNull @Param("date") LocalDate date);
+    @Query("SELECT m FROM Menu m WHERE  m.restaurant.id = :restaurantId AND m.date=:date ORDER BY m.date DESC, m.restaurant.name ASC")
+    List<Menu> findAllByRestaurant(@Param("restaurantId") int restaurantId, @NotNull @Param("date") LocalDate date);
 }
