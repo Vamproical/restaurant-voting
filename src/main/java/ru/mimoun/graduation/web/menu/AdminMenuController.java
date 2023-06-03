@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +39,8 @@ public class AdminMenuController {
     @Operation(summary = "Get a list of menu",
                parameters = @Parameter(name = "sort", description = "Specified fields and direction to sort the list"))
     @GetMapping
-    public List<MenuTo> getAll(@SortDefault(value = "date") Sort sort) {
-        return mapper.toListDto(repository.findAll(sort));
+    public List<MenuTo> getAll() {
+        return mapper.toListDto(repository.findAll());
     }
 
     @Operation(summary = "Delete menu by id")

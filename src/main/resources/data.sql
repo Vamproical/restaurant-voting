@@ -22,6 +22,5 @@ VALUES (1, 'Delicious dish', 150),
        (2, 'Not visible dish', 10);
 
 INSERT INTO VOTE(VOTE_DATE, RESTAURANT_ID, USER_ID)
-VALUES (CURRENT_DATE(), 1, 1),
-       (CURRENT_DATE(), 2, 2);
+VALUES (CURRENT_DATE(), 1, 1);
 

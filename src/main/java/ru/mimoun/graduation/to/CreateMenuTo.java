@@ -12,8 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateMenuTo {
-    @NotNull
-    Integer restaurantId;
+    int restaurantId;
 
     @NotNull
     List<DishTo> dishes;

@@ -11,6 +11,7 @@ import ru.mimoun.graduation.repository.RestaurantRepository;
 import ru.mimoun.graduation.repository.UserRepository;
 import ru.mimoun.graduation.repository.VoteRepository;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -22,6 +23,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
+    private final Clock clock;
 
     @Transactional
     public Vote vote(int restaurantId, int userId) {
@@ -33,16 +35,16 @@ public class VoteService {
     }
 
     @Transactional
-    public Vote revote(int restaurantId, int userId) {
-        LocalDate voteDate = LocalDate.now();
-        LocalTime voteTime = LocalTime.now();
+    public void revote(int restaurantId, int userId) {
+        LocalDate voteDate = LocalDate.now(clock);
+        LocalTime voteTime = LocalTime.now(clock);
         Vote vote = voteRepository.findByUserIdAndVoteDate(userId, voteDate)
                                   .orElseThrow(() -> new NotFoundException("Vote with user_id=" + userId + " not found"));
 
         checkTimeToVote(voteTime);
 
         vote.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
-        return voteRepository.save(vote);
+        voteRepository.save(vote);
     }
 
     private void checkTimeToVote(LocalTime time) {

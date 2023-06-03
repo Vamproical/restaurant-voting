@@ -78,7 +78,7 @@ class AdminMenuControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(AdminMenuController.REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MenuTestData.MENU_TO_MATCHER.contentJson(MenuTestData.menuTo2, MenuTestData.menuTo));
+                .andExpect(MenuTestData.MENU_TO_MATCHER.contentJson(MenuTestData.menuTo, MenuTestData.menuTo2));
     }
 
     @Test
