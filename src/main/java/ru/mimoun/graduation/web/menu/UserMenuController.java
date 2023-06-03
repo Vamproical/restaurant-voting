@@ -2,6 +2,8 @@ package ru.mimoun.graduation.web.menu;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.mimoun.graduation.repository.MenuRepository;
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = UserMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "menus")
 public class UserMenuController {
     static final String REST_URL = "/api/menus";
 
@@ -27,6 +30,7 @@ public class UserMenuController {
 
     @Operation(summary = "Get list of menu for today")
     @GetMapping
+    @Cacheable
     public List<MenuTo> getAllForToday() {
         return mapper.toListDto(repository.findAllByDate(LocalDate.now()));
     }

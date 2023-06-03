@@ -3,6 +3,8 @@ package ru.mimoun.graduation.web.restaurant;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "restaurants")
 public class AdminRestaurantController {
     static final String REST_URL = "/api/admin/restaurants";
 
@@ -27,12 +30,14 @@ public class AdminRestaurantController {
     @Operation(summary = "Delete restaurant by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void delete(@PathVariable int id) {
         repository.deleteExisted(id);
     }
 
     @Operation(summary = "Create restaurant")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(allEntries = true)
     public ResponseEntity<RestaurantTo> createWithLocation(@Valid @RequestBody RestaurantTo restaurant) {
         ValidationUtil.checkNew(restaurant);
         Restaurant created = repository.save(mapper.toModel(restaurant));
@@ -45,6 +50,7 @@ public class AdminRestaurantController {
     @Operation(summary = "Update restaurant by id")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody RestaurantTo restaurant, @PathVariable int id) {
         ValidationUtil.assureIdConsistent(restaurant, id);
         repository.save(mapper.toModel(restaurant));

@@ -3,6 +3,8 @@ package ru.mimoun.graduation.web.restaurant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.mimoun.graduation.repository.RestaurantRepository;
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = UserRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "restaurants")
 public class UserRestaurantController {
     static final String REST_URL = "/api/restaurants";
 
@@ -27,6 +30,7 @@ public class UserRestaurantController {
 
     @Operation(summary = "Get list of restaurant")
     @GetMapping
+    @Cacheable
     public List<RestaurantTo> getAll() {
         return mapper.toListDto(repository.findAll());
     }

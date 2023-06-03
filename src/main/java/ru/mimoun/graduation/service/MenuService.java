@@ -3,6 +3,8 @@ package ru.mimoun.graduation.service;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mimoun.graduation.model.Menu;
@@ -17,12 +19,14 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "menus")
 public class MenuService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository repository;
     private final DishMapper dishMapper;
 
     @Transactional
+    @CacheEvict(allEntries = true)
     public Menu save(@NotNull CreateMenuTo menuTo) {
         Restaurant restaurant = restaurantRepository.getExisted(menuTo.getRestaurantId());
         LocalDate date = menuTo.getMenuDate() == null ? LocalDate.now() : menuTo.getMenuDate();
@@ -31,6 +35,7 @@ public class MenuService {
     }
 
     @Transactional
+    @CacheEvict(allEntries = true)
     public void update(@NonNull UpdateMenuTo menuTo, int menuId) {
         Restaurant restaurant = restaurantRepository.getExisted(menuTo.restaurantId());
         Menu menu = repository.getExisted(menuId);
